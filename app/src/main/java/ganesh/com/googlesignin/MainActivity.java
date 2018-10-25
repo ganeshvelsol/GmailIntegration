@@ -20,9 +20,18 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.signin.SignInOptions;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+import javax.xml.datatype.Duration;
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener
 {
-    Button sign_in;
+    Button sign_in,ss;
     GoogleApiClient googleApiClient;
     private static final int RC_SIGN_IN = 007;
     @Override
@@ -31,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sign_in=(Button)findViewById(R.id.sign_in);
+        ss=(Button)findViewById(R.id.ss);
         sign_in.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -40,6 +50,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         });
         GoogleSignInOptions so=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient=new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,so).build();
+        ss.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                String startDate = "2018-10-10T10:00:06";
+
+                //code for reading the date from system
+                DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd'T' HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                String edate=dateFormat1.format(cal.getTime());//here ends
+
+                DateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
+
+                try {
+                    Date d=dateFormat.parse(startDate);
+                    Date d2=dateFormat.parse(edate);
+
+                    long diff=(d2.getTime()-d.getTime())/(24 * 60 * 60 * 1000);
+                    Toast.makeText(MainActivity.this, "dates"+diff, Toast.LENGTH_SHORT).show();
+                } catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void onButtonClicks()
@@ -127,4 +163,5 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             });
         }
     }
+
 }
